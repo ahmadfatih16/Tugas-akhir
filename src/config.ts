@@ -13,7 +13,21 @@ const DEFAULT_RULES: LinterRules = {
 
 const DEFAULT_CONFIG: LinterConfig = {
   rules: DEFAULT_RULES,
-  ignore: ['node_modules/**', 'dist/**', '.git/**'],
+  ignore: [
+    'node_modules/**', 
+    'dist/**', 
+    '.git/**',
+    '.vscode/**',
+    'test-bed/**', // Kita tambahkan folder tes kita
+
+    // Abaikan file-file konfigurasi di root
+    'package.json',
+    'package-lock.json',
+    'tsconfig.json',
+    'jest.config.js', // <-- FILE BARU YANG DI-IGNORE
+    '.gitignore',
+    '.naminglintrc.json'
+  ],
 };
 
 /**

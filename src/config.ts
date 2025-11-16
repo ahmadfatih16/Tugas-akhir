@@ -18,7 +18,6 @@ const DEFAULT_CONFIG: LinterConfig = {
     'dist/**', 
     '.git/**',
     '.vscode/**',
-    'test-bed/**', // Kita tambahkan folder tes kita
 
     // Abaikan file-file konfigurasi di root
     'package.json',

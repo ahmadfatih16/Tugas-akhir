@@ -1,5 +1,5 @@
 {
-  "name": "naming-convention-linter",
+  "name": "naming-standardizer-engine",
   "version": "1.0.0",
   "description": "Ekstensi Linting untuk Menstandarkan Penamaan File dan Folder",
   "main": "dist/cli.js",

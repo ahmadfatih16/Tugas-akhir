@@ -2,7 +2,11 @@
   "name": "naming-standardizer-engine",
   "version": "1.0.0",
   "description": "Ekstensi Linting untuk Menstandarkan Penamaan File dan Folder",
-  "main": "dist/cli.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "naming-standardizer": "./dist/cli.js"
+  },
   "scripts": {
     "start": "ts-node src/cli.ts",
     "build": "tsc",

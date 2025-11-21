@@ -46,16 +46,55 @@ const DEFAULT_RULES = {
 const DEFAULT_CONFIG = {
     rules: DEFAULT_RULES,
     ignore: [
+        // 1. FOLDER SISTEM & BUILD
         'node_modules/**',
         'dist/**',
+        'build/**',
+        'out/**',
+        'coverage/**',
         '.git/**',
         '.vscode/**',
-        // Abaikan file-file konfigurasi di root
+        '.idea/**',
+        '.next/**',
+        '.nuxt/**',
+        'venv/**',
+        // 2. FILE DOKUMENTASI STANDAR
+        'README.md',
+        'LICENSE',
+        'LICENSE.md',
+        'CHANGELOG.md',
+        'CONTRIBUTING.md',
+        'Dockerfile',
+        'Makefile',
+        // 3. CONFIG & LOCKFILES
         'package.json',
         'package-lock.json',
-        'tsconfig.json',
-        'jest.config.js', // <-- FILE BARU YANG DI-IGNORE
+        'yarn.lock',
+        'pnpm-lock.yaml',
+        'bun.lockb',
+        'composer.json',
+        'composer.lock',
+        // 4. DOTFILES & CONFIG TOOLS
         '.gitignore',
+        '.gitattributes',
+        '.env*', // Meng-cover .env, .env.local, dll
+        '.editorconfig',
+        '.npmrc',
+        // 5. CONFIG JS/TS (Wildcard agar cover .js, .ts, .json)
+        'tsconfig.json',
+        'jsconfig.json',
+        'jest.config.*',
+        'vite.config.*',
+        'webpack.config.*',
+        'rollup.config.*',
+        'babel.config.*',
+        'next.config.*',
+        'tailwind.config.*',
+        'postcss.config.*',
+        '.eslintrc*',
+        'eslint.config.*',
+        '.prettierrc*',
+        // 6. KONFIGURASI LINTER KITA SENDIRI
         '.naminglintrc.json'
     ],
 };

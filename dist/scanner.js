@@ -1,5 +1,4 @@
 "use strict";
-// src/scanner.ts
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -38,21 +37,65 @@ exports.scanFiles = scanFiles;
 const glob_1 = require("glob");
 const path = __importStar(require("path"));
 /**
- * Memindai file dan folder secara rekursif.
- * @param directory Direktori utama proyek
- * @param ignorePatterns Array pola glob untuk diabaikan (dari config)
- * @returns Array berisi path file dan folder relatif
+ * Fungsi pembantu untuk mengecek apakah sebuah path harus di-ignore
+ * berdasarkan pola dari config.ts
  */
+function isIgnored(filePath, ignorePatterns) {
+    // Normalisasi path file ke format '/'
+    const normalizedPath = filePath.replace(/\\/g, '/');
+    for (const pattern of ignorePatterns) {
+        // 1. Handle pola folder (contoh: 'node_modules/**')
+        if (pattern.endsWith('/**')) {
+            const folderName = pattern.replace('/**', '');
+            // Cek apakah path mengandung folder tersebut (di tengah atau di akhir)
+            if (normalizedPath.includes(`/${folderName}/`) || normalizedPath.endsWith(`/${folderName}`)) {
+                return true;
+            }
+        }
+        // 2. Handle pola file eksak (contoh: 'package.json')
+        else if (path.basename(normalizedPath) === pattern) {
+            return true;
+        }
+        // 3. Handle pola wildcard ekstensi (contoh: '*.log')
+        else if (pattern.startsWith('*.')) {
+            const ext = pattern.substring(1); // ambil .log
+            if (normalizedPath.endsWith(ext)) {
+                return true;
+            }
+        }
+        // 4. Handle pola file config spesifik dengan wildcard (contoh: '.env*')
+        else if (pattern.endsWith('*')) {
+            const prefix = pattern.slice(0, -1); // ambil .env
+            if (path.basename(normalizedPath).startsWith(prefix)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 function scanFiles(directory, ignorePatterns) {
+    // Normalisasi direktori input
+    const cleanDirectory = directory.replace(/\\/g, '/');
     const options = {
-        cwd: directory,
+        cwd: cleanDirectory,
+        // Kita tetap kirim ignore ke glob sebagai pertahanan pertama
         ignore: ignorePatterns,
-        dot: true, // Memasukkan file/folder yang diawali titik (misal: .github)
+        dot: true,
         absolute: true,
+        nodir: false
     };
-    // Memindai semua file DAN folder ('**')
-    const allPaths = (0, glob_1.sync)('**', options);
-    // Mengubah path absolut kembali menjadi path relatif
-    const relativePaths = allPaths.map(p => path.relative(directory, p));
-    return relativePaths;
+    try {
+        // 1. Ambil SEMUA file (mungkin glob gagal ignore, jadi kita dapat 9000 file)
+        const allPaths = (0, glob_1.sync)('**', options);
+        // 2. FILTER MANUAL (JURUS KUNCI)
+        // Kita saring ulang hasil glob menggunakan fungsi isIgnored di atas.
+        // Ini memaksa daftar dari config.ts untuk dieksekusi.
+        const filteredPaths = allPaths.filter(p => !isIgnored(p, ignorePatterns));
+        // 3. Kembalikan path relatif
+        return filteredPaths.map(p => path.relative(directory, p));
+    }
+    catch (e) {
+        console.error("Scanner Error:", e);
+        return [];
+    }
 }

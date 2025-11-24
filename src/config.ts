@@ -68,7 +68,19 @@ const DEFAULT_CONFIG: LinterConfig = {
     '.prettierrc*',
     
     // 6. KONFIGURASI LINTER KITA SENDIRI
-    '.naminglintrc.json'
+    '.naminglintrc.json',
+
+    // 7. KHUSUS VSCODE EXTENSION (Generator 'yo code') <--- TAMBAHAN BARU
+    '.vscodeignore',
+    'vsc-extension-quickstart.md',
+    '**/*.d.ts',
+
+    // 8. FILE FILE TESTING
+    '.vscode-test.*',
+    '**/*.test.ts',   
+    '**/*.test.js',
+    '**/test/**',       
+    '**/suite/**'
   ],
 };
 
